@@ -22,23 +22,23 @@ New-Item -ItemType directory -Path $path | Out-Null
 
 # List drivers by using the built-in Get-WindowsDriver call
 $driversFile = Join-Path $path -ChildPath "drivers.csv"
-Write-Host "Processing drivers"
+Write-Host "Gathering drivers"
 Get-WindowsDriver -Online | Export-Csv -NoTypeInformation -Path $driversFile
 
 # List installed applications by
 # using the provided Get-InstalledApplication cmdlet
 $appsFile = Join-Path $path -ChildPath "applications.csv"
-Write-Host "Processing applications"
+Write-Host "Gathering applications"
 Get-InstalledApplication -OutputType CSV -outfile $appsFile
 
 # List services by using the built-in Get-Service call
 $servicesFile = Join-Path $path -ChildPath "services.csv"
-Write-Host "Processing services"
+Write-Host "Gathering services"
 Get-Service | Export-Csv -NoTypeInformation -Path $servicesFile
 
 # List programs & programdata in the windows default folders
 $foldersFile = Join-Path $path -ChildPath "folders.csv"
-Write-Host "Processing application folders"
+Write-Host "Gathering application folders"
 Get-Item 'C:\Program Files\*' |
     Select-Object -Property Parent, Name, CreationTime |
     Export-Csv -NoTypeInformation -Path $foldersFile
@@ -48,6 +48,23 @@ Get-Item 'C:\Program Files (x86)\*' |
 Get-Item 'C:\ProgramData\*' |
     Select-Object -Property Parent, Name, CreationTime |
     Export-Csv -NoTypeInformation -Append -Path $foldersFile
+
+# List startup programs
+$startupFile = Join-Path $path -ChildPath "startup.csv"
+Write-Host "Gathering startup programs"
+Get-CimInstance Win32_StartupCommand |
+    Select-Object Name, command, Location, User |
+    Export-Csv -NoTypeInformation -Append -Path $startupFile
+
+# List start menu folders
+$startmenuFile = Join-Path $path -ChildPath "startmenu.csv"
+Write-Host "Gathering start menu folders"
+Get-ChildItem -Recurse -Directory -Path "$([Environment]::GetFolderPath('StartMenu'))" |
+    Select-Object -Property Name, Parent, FullName, CreationTime |
+    Export-Csv -NoTypeInformation -Path $startmenuFile
+Get-ChildItem -Recurse -Directory -Path "$([Environment]::GetFolderPath('CommonStartMenu'))" |
+    Select-Object -Property Name, Parent, FullName, CreationTime |
+    Export-Csv -NoTypeInformation -Append -Path $startmenuFile
 
 # Output the unique folder name so it can be copied over to a memo
 Write-Host $path

@@ -12,6 +12,8 @@ Things that are written out:
 * Applications
 * Services
 * Program folders
+* Start menu folders
+* Startup programs
 
 To make running the script easier, create a shortcut of the .ps1 file and:
 * Change the target to "powershell.exe C:\path-to-script\dump-state.ps1", 
