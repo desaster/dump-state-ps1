@@ -100,7 +100,7 @@ Function Get-InstalledApplication {
                                     Architecture  = "64-BIT";
                                     ServerName = $EachServer;
                                     Version = $Version;
-                                    Publisher= $Publisher;
+                                    Publisher = $Publisher;
                                 }
                             }
                         }
@@ -182,7 +182,7 @@ Function Get-InstalledApplication {
                                 Architecture  = "32-BIT";
                                 ServerName = $EachServer;
                                 Version = $Version;
-                                Publisher= $Publisher;
+                                Publisher = $Publisher;
                             }
                         }
                     }
@@ -210,7 +210,9 @@ Function Get-InstalledApplication {
     } elseif ($OutputType -eq "GridView") {
         $object|Out-GridView
     } elseif ($OutputType -eq "CSV") {
-        $object | export-csv -path $outfile -NoTypeInformation
+        $object |
+            Sort-Object -Property Application |
+            export-csv -path $outfile -NoTypeInformation
     } else {
         write-host " Invalid Output Type $OutputType"
     }
