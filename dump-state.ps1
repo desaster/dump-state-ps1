@@ -66,6 +66,11 @@ Get-ChildItem -Recurse -Directory -Path "$([Environment]::GetFolderPath('CommonS
     Select-Object -Property Name, Parent, FullName, CreationTime |
     Export-Csv -NoTypeInformation -Append -Path $startmenuFile
 
+# BIOS version
+$biosFile = Join-Path $path -ChildPath "bios.csv"
+Write-Host "Gathering start BIOS version"
+Get-WmiObject win32_bios | Export-Csv -NoTypeInformation -Path $biosFile
+
 # Output the unique folder name so it can be copied over to a memo
 Write-Host $path
 

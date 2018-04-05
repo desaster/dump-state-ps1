@@ -14,6 +14,7 @@ Things that are written out:
 * Program folders
 * Start menu folders
 * Startup programs
+* BIOS version
 
 To make running the script easier, create a shortcut of the .ps1 file and:
 * Change the target to "powershell.exe C:\path-to-script\dump-state.ps1", 
