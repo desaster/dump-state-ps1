@@ -1,3 +1,8 @@
+param(
+    [string]$Prefix = $env:computerName,
+    [string]$Postfix = ""
+)
+
 # these settings should make the script stop on error
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -17,6 +22,12 @@ $path = Join-Path -Path $PSScriptRoot -ChildPath "output"
 
 # create unique folder
 $stamp = $(get-date -f yyyyMMdd) + $(get-date -f HHmmss)
+if ([string]::IsNullOrEmpty($Prefix) -eq $false) {
+    $stamp = "$($Prefix.ToLower())_$stamp"
+}
+if ([string]::IsNullOrEmpty($Postfix) -eq $false) {
+    $stamp = "$($stamp)_$Postfix"
+}
 $path = Join-Path -Path $path -ChildPath $stamp
 New-Item -ItemType directory -Path $path | Out-Null
 
