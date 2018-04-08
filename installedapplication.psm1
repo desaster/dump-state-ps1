@@ -211,7 +211,7 @@ Function Get-InstalledApplication {
         $object|Out-GridView
     } elseif ($OutputType -eq "CSV") {
         $object |
-            Sort-Object -Property Application |
+            Sort-Object -Property Application, Publisher, Version |
             export-csv -path $outfile -NoTypeInformation
     } else {
         write-host " Invalid Output Type $OutputType"
