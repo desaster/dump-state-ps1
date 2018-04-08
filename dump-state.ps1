@@ -1,6 +1,7 @@
 param(
     [string]$Prefix = $env:computerName,
-    [string]$Postfix = ""
+    [string]$Postfix = "",
+    [string]$OutputPath = ""
 )
 
 # these settings should make the script stop on error
@@ -18,7 +19,11 @@ If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 # the module(s) and output folder should be in the same directory as the main
 # script, therefore they can be accessed by $PSScriptRoot
 Import-Module $PSScriptRoot\installedapplication.psm1
-$path = Join-Path -Path $PSScriptRoot -ChildPath "output"
+if ([string]::IsNullOrEmpty($OutputPath) -eq $true) {
+    $path = Join-Path -Path $PSScriptRoot -ChildPath "output"
+} else {
+    $path = $OutputPath
+}
 
 # create unique folder
 $stamp = $(get-date -f yyyyMMdd) + $(get-date -f HHmmss)
