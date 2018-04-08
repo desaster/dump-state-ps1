@@ -78,7 +78,16 @@ Write-Host "Gathering startup programs"
 Get-CimInstance Win32_StartupCommand |
     Select-Object Name, command, Location, User |
     Sort-Object -Property Name, Command |
-    Export-Csv -NoTypeInformation -Append -Path $startupFile
+    Export-Csv -NoTypeInformation -Path $startupFile
+
+# List scheduled tasks, excluding the ones in \Microsoft\
+$tasksFile = Join-Path $path -ChildPath "tasks.csv"
+Write-Host "Gathering scheduled tasks"
+Get-ScheduledTask |
+    Where-Object {$_.TaskPath -notlike "\Microsoft\*" } |
+    Sort-Object -Property URI |
+    Select-Object -Property TaskPath, Author, TaskName, State, Triggers |
+    Export-Csv -NoTypeInformation -Path $tasksFile
 
 # List start menu folders
 $startmenuFile = Join-Path $path -ChildPath "startmenu.csv"
@@ -94,7 +103,7 @@ Get-ChildItem -Recurse -Directory -Path "$([Environment]::GetFolderPath('CommonS
 
 # BIOS version
 $biosFile = Join-Path $path -ChildPath "bios.csv"
-Write-Host "Gathering start BIOS version"
+Write-Host "Gathering BIOS version"
 Get-WmiObject win32_bios | Export-Csv -NoTypeInformation -Path $biosFile
 
 # Output the unique folder name so it can be copied over to a memo
