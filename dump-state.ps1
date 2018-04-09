@@ -49,6 +49,14 @@ $appsFile = Join-Path $path -ChildPath "applications.csv"
 Write-Host "Gathering applications"
 Get-InstalledApplication -OutputType CSV -outfile $appsFile
 
+# List App Packages
+$appPackagesFile = Join-Path $path -ChildPath "apppackages.csv"
+Write-Host "Gathering app packages"
+Get-AppxPackage -AllUsers |
+    Sort-Object -Property Name, Version |
+    Select-Object -Property Name, Version |
+    Export-Csv -NoTypeInformation -Path $appPackagesFile
+
 # List services by using the built-in Get-Service call
 $servicesFile = Join-Path $path -ChildPath "services.csv"
 Write-Host "Gathering services"
