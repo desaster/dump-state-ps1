@@ -18,7 +18,7 @@ If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 
 # the module(s) and output folder should be in the same directory as the main
 # script, therefore they can be accessed by $PSScriptRoot
-Import-Module $PSScriptRoot\installedapplication.psm1
+Import-Module $PSScriptRoot\installedapplication.psm1 -Force
 if ([string]::IsNullOrEmpty($OutputPath) -eq $true) {
     $path = Join-Path -Path $PSScriptRoot -ChildPath "output"
 } else {
@@ -47,7 +47,10 @@ Get-WindowsDriver -Online |
 # using the provided Get-InstalledApplication cmdlet
 $appsFile = Join-Path $path -ChildPath "applications.csv"
 Write-Host "Gathering applications"
-Get-InstalledApplication -OutputType CSV -outfile $appsFile
+Get-InstalledApplication |
+    Sort-Object -Property Application, Publisher, Architecture, Version |
+    Select-Object -Property Application, Version, Architecture, Publisher |
+    Export-Csv -NoTypeInformation -Path $appsFile
 
 # List App Packages
 $appPackagesFile = Join-Path $path -ChildPath "apppackages.csv"
