@@ -119,6 +119,11 @@ $biosFile = Join-Path $path -ChildPath "bios.csv"
 Write-Host "Gathering BIOS version"
 Get-WmiObject win32_bios | Export-Csv -NoTypeInformation -Path $biosFile
 
+$osVersionFile = Join-Path $path -ChildPath "osversion.csv"
+Write-Host "Gathering OS version"
+[System.Environment]::OSVersion |
+    Export-Csv -NoTypeInformation -Path $osVersionFile
+
 # Output the unique folder name so it can be copied over to a memo
 Write-Host $path
 
