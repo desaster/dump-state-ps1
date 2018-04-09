@@ -64,7 +64,9 @@ Get-AppxPackage -AllUsers |
 $servicesFile = Join-Path $path -ChildPath "services.csv"
 Write-Host "Gathering services"
 Get-Service |
-    Sort-Object -Property Name |
+    Where-Object { $_.ServiceType -like "*Win32*" } |
+    Sort-Object -Property ServiceName |
+    Select-Object -Property ServiceName, DisplayName, StartType |
     Export-Csv -NoTypeInformation -Path $servicesFile
 
 # List programs & programdata in the windows default folders
