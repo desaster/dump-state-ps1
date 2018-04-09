@@ -9,12 +9,13 @@ keeping things clean.
 Things that are written out:
 
 * Drivers
-* Applications
+* Applications + Windows Store Apps
 * Services
 * Program folders
 * Start menu folders
-* Startup programs
-* BIOS version
+* Startup programs (limited)
+* Scheduled Tasks
+* BIOS version + Windows version
 
 To make running the script easier, create a shortcut of the .ps1 file and:
 * Change the target to "powershell.exe C:\path-to-script\dump-state.ps1", 
